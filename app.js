@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:false}))
 
 
-app.use("/admin",adminRouter)
+app.use("/admin",adminRouter.router)
 app.use(shopRouter)
 app.use(express.static(path.join(__dirname,"public")))
 
