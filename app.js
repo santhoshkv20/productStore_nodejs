@@ -7,7 +7,7 @@ const shopRouter = require("./routes/shop");
 
 const app = express();
 app.use(bodyParser.urlencoded({extended:false}))
-app.set("view engine","pug")
+app.set("view engine","ejs")
 app.set("views","views")
 
 
