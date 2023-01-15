@@ -3,6 +3,7 @@ const path = require("path")
 const bodyParser = require("body-parser");
 const adminRouter = require("./routes/admin");
 const shopRouter = require("./routes/shop");
+const { getError } = require("./controllers/error");
 
 
 const app = express();
@@ -15,7 +16,5 @@ app.use("/admin",adminRouter.router)
 app.use(shopRouter)
 app.use(express.static(path.join(__dirname,"public")))
 
-app.use((req,res,next)=>{
-res.render("404")
-})
+app.use("/",getError)
 app.listen(3000);
