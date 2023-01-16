@@ -17,6 +17,13 @@ exports.getProduct = (req,res,next)=>{
     
 }
 
+
+exports.getProductDetail = (req,res,next)=>{
+const productId = req.params.productId;
+console.log(productId)
+res.redirect("/")
+}
+
 exports.getIndex = (req,res,next)=>{
     const product = Product.fetchAll((products)=>{
         console.log(product)
