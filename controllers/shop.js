@@ -1,8 +1,8 @@
 const Product = require("../model/product");
 
 
-exports.getProduct = (req,res,next)=>{
-    const product = Product.fetchAll((products)=>{
+exports.getProduct = (req, res, next) => {
+    const product = Product.fetchAll((products) => {
         console.log(product)
         res.render('shop/product-list', {
             prods: products,
@@ -11,27 +11,34 @@ exports.getProduct = (req,res,next)=>{
             hasProducts: products.length > 0,
             activeShop: true,
             productCSS: true
-          });
+        });
 
     });
-    
+
 }
 
 
-exports.getProductDetail = (req,res,next)=>{
-const productId = req.params.productId;
-console.log(productId)
-res.redirect("/")
+exports.getProductDetail = (req, res, next) => {
+    const productId = req.params.productId;
+    Product.fetchById(productId, product => {
+        console.log(product)
+        res.render("shop/product-detail", {
+            product: product,
+            path: "/products",
+            pageTitle: "product details"
+        })
+    })
+
 }
 
-exports.getIndex = (req,res,next)=>{
-    const product = Product.fetchAll((products)=>{
+exports.getIndex = (req, res, next) => {
+    const product = Product.fetchAll((products) => {
         console.log(product)
         res.render('shop/index', {
             prods: products,
             pageTitle: 'Shop',
             path: '/',
-          });
+        });
 
     });
 }
@@ -44,16 +51,24 @@ exports.getCart = (req, res, next) => {
 
 }
 
-exports.getCheckout = (req,res,next)=>{
-    res.render("shop/checkout",{
-        path:"/checkout",
-        pageTitle:"Chekout"
+exports.postCart = (req,res,next)=>{
+const productId = req.body.productId
+console.log(productId)
+Product.fetchById(productId,(product)=>{
+
+})
+}
+
+exports.getCheckout = (req, res, next) => {
+    res.render("shop/checkout", {
+        path: "/checkout",
+        pageTitle: "Chekout"
     })
 }
 
-exports.getOrders = (req,res,next)=>{
-    res.render("shop/orders",{
-        path:"/orders",
-        pageTitle:"Orders"
+exports.getOrders = (req, res, next) => {
+    res.render("shop/orders", {
+        path: "/orders",
+        pageTitle: "Orders"
     })
 }
