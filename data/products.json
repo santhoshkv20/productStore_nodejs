@@ -1,17 +1,14 @@
 [
     {
-        "title": "book"
+        "title": "apple",
+        "description": "red apple",
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrf4xI-7Jy2uL4XtRmI-IJoVR4EzvLxjgcg&usqp=CAU",
+        "price": "200"
     },
     {
-        "title": "ef"
-    },
-    {
-        "title": "book"
-    },
-    {
-        "title": "book"
-    },
-    {
-        "title": "sdf"
+        "title": "book",
+        "description": "New edition",
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrf4xI-7Jy2uL4XtRmI-IJoVR4EzvLxjgcg&usqp=CAU",
+        "price": "30"
     }
 ]
