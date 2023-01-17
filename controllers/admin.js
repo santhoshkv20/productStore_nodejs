@@ -13,7 +13,7 @@ const product = [];
 exports.postAddProduct = (req,res,next)=>{
     const {title,description,price,imageUrl} = req.body
     console.log(title,description,price,description)
-    let product = new Product(title,description,imageUrl,price).save()
+    let product = new Product(null,title,description,imageUrl,price).save()
     res.redirect('/');
 }
 
@@ -33,6 +33,14 @@ exports.getEditproduct =   (req, res, next) => {
         });
     })
     
+}
+
+exports.postEditProduct = (req, res, next) => {
+    const prodId = req.body.productId
+    const { title, description, price, imageUrl } = req.body
+
+    let product = new Product(prodId, title, description, imageUrl, price).save()
+    res.redirect("/products")
 }
 
 exports.getProducts = (req,res,next)=>{
