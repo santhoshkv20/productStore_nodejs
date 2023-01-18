@@ -38,7 +38,6 @@ exports.getEditproduct =   (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
     const prodId = req.body.productId
     const { title, description, price, imageUrl } = req.body
-
     let product = new Product(prodId, title, description, imageUrl, price).save()
     res.redirect("/products")
 }
@@ -52,5 +51,10 @@ exports.getProducts = (req,res,next)=>{
             path: 'admin/products',
           });
 
-    });
+    }); 
+}
+exports.postDeletProduct = (req, res, next) => {
+    const productId = req.params.productId
+    Product.deletById(productId);
+    res.redirect("/admin/products")
 }
