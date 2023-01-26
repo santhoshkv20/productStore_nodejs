@@ -14,19 +14,19 @@ app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const User = require('./models/user');
 const mongoClient = require('./util/database').mongoClient;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
  app.use((req, res, next) => {
-//   User.findById(1)
-//     .then(user => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch(err => console.log(err));
-next();
+  User.findById("63d2536c8ecf04a3eeec47b1")
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
  });
 
 app.use('/admin', adminRoutes);
