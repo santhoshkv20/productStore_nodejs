@@ -6,14 +6,14 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this.id = id;
+    this.id = new mongodb.ObjectId(id);
   }
   save() {
     const db = getDb()
     let dataOp;
     if (this.id) {
       console.log(this._id)
-      dataOp = db.collection("products").updateOne({ _id: new mongodb.ObjectId(this.id) },{$set:{title:this.title,price:this.price,description:this.description,imageUrl:this.imageUrl}});
+      dataOp = db.collection("products").updateOne({ _id: this.id },{$set:this});
 
       dataOp.then(data=>{
         console.log(data)
