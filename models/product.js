@@ -51,7 +51,7 @@ class Product {
   static deletetById(id){
     const db  = getDb();
     console.log(new mongodb.ObjectId( id))
-    return db.collection("produduts").findOneAndDelete({_id:new mongodb.ObjectId( id)}).then(data => {
+    return db.collection("products").deleteOne({_id:new mongodb.ObjectId( id)}).then(data => {
       return data
     })
   }
