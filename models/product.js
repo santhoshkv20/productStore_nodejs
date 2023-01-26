@@ -1,18 +1,34 @@
 const getDb = require("../util/database").getdb
 const mongodb = require("mongodb")
 class Product {
-  constructor(title, price, description, imageUrl) {
+  constructor(title, price, description, imageUrl,id) {
     this.title = title;
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
+    this.id = id;
   }
   save() {
     const db = getDb()
-    return db.collection("products")
-      .insertOne(this)
+    let dataOp;
+    if (this.id) {
+      console.log(this._id)
+      dataOp = db.collection("products").updateOne({ _id: new mongodb.ObjectId(this.id) },{$set:{title:this.title,price:this.price,description:this.description,imageUrl:this.imageUrl}});
+
+      dataOp.then(data=>{
+        console.log(data)
+      })
+      .catch(err=>{
+        console.log("err,",err)
+      })
+    }
+    else {
+      dataOp = db.collection("products").insertOne(this)
+    }
+    return dataOp
       .then(data => {
         console.log("data", data)
+        return data
       })
       .catch(err => { })
   }
@@ -25,9 +41,17 @@ class Product {
   }
   static fetchById(id){
     const db = getDb();
-    console.log("jseh")
+    //console.log("jseh")
     return db.collection("products").find({_id:new mongodb.ObjectId( id)}).toArray().then(data=>{
-      console.log("llerj",data)
+  //    console.log("llerj",data)
+      return data
+    })
+  }
+
+  static deletetById(id){
+    const db  = getDb();
+    console.log(new mongodb.ObjectId( id))
+    return db.collection("produduts").findOneAndDelete({_id:new mongodb.ObjectId( id)}).then(data => {
       return data
     })
   }
