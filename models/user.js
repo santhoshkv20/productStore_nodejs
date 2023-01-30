@@ -18,9 +18,8 @@ class User{
   }
 
   addToCart(product) {
-    if(!this.cart.items)this.cart.items = []
+    if (!this.cart.items) this.cart.items = []
     const cartProductIndex = this.cart.items.findIndex(cp => {
-console.log("product",product[0]._id,cp.productId)
       return cp.productId.toString() === product[0]._id.toString();
     });
     let newQuantity = 1;
@@ -46,6 +45,26 @@ console.log("product",product[0]._id,cp.productId)
         { _id: new mongoDb. ObjectId(this._id) },
         { $set: { cart: updatedCart } }
       );
+  }
+
+  getCart() {
+    const db = getdb();
+    const productId = this.cart.items.map(i => {
+      return i.productId
+    })
+
+    return db.collection("products").find({ _id: { $in: productId } })
+      .toArray()
+      .then(produts => {
+        return produts.map(p => {
+          return {
+            ...p,
+            quantity: this.cart.items.find(i => {
+              return i.productId.toString() === p._id.toString()
+            }).quantity
+          }
+        })
+      })
   }
 
   static findById(id){
