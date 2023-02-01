@@ -1,4 +1,4 @@
-const user = require("../models/user");
+const User = require("../models/user");
 
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req.get("Cookie").split(";")[1].trim().split("=")[1]==="true"
@@ -17,10 +17,28 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  const { email, password } = req.body;
+  User.findOne({ email: email }).then(userDoc => {
+    if (userDoc) {
+      return res.redirect("/signup")
+    }
+    const user = User(
+      {
+        email: email,
+        password: password,
+        cart: { items: [] }
+
+      })
+    return user.save();
+  })
+    .then(user => {
+      res.redirect("/login")
+    })
+};
 
 exports.postLogin = (req, res) => {
-  user.findById('63d8bf921483e03dfd7ad457')
+  User.findOne({email:req.body.email})
     .then(user => {
       console.log(user)
       req.session.isLoggedIn = true;
