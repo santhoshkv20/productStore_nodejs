@@ -1,4 +1,6 @@
 const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,14 +11,14 @@ const MongodbStore = require("connect-mongodb-session")(session);
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
-const MONGODB_URI = 'mongodb+srv://skv201:m4xgrRaIgzdmahea@cluster0.5yjzbfs.mongodb.net/backendLearning?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI
 const csrfProtection = csrf();
 const app = express();
 const store = new MongodbStore({
   uri:MONGODB_URI,
   collection:"sessions"
 })
-
+console.log(process.env.PORT)
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -54,7 +56,7 @@ mongoose
   )
   .then(result => {
    
-    app.listen(30001);
+    app.listen(process.env.PORT);
   })
   .catch(err => {
     console.log(err);
