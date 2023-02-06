@@ -117,3 +117,18 @@ exports.postLogin = (req, res) => {
   // res.setHeader("Set-Cookie", "isLoggedIn=true")
 
   }
+
+  exports.getreset = (req,res)=>{
+    let message = req.flash('error');
+    if (message.length > 0) {
+      message = message[0];
+    } else {
+      message = null;
+    }
+    
+    res.render('auth/reset', {
+      path: '/reset',
+      pageTitle: 'reset',
+      errorMessage: message
+    });
+  }
