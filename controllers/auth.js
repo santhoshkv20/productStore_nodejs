@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs")
 var nodemailer = require('nodemailer');
 const User = require("../models/user");
@@ -5,7 +6,7 @@ const User = require("../models/user");
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: '',
+    user: 'skv8492@gmail.com',
     pass: ''
   }
 });
@@ -125,10 +126,50 @@ exports.postLogin = (req, res) => {
     } else {
       message = null;
     }
-    
+
     res.render('auth/reset', {
       path: '/reset',
       pageTitle: 'reset',
       errorMessage: message
     });
   }
+
+exports.postResetPassword = (req, res) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if(err){ 
+      console.log("err",err)
+      return res.redirect("/reset");
+  }
+    const token = buffer.toString("hex")
+    User.findOne({ email: req.body.email }).then(user => {
+      if (!user) {
+        req.flash("error", "user with this email not found")
+        return res.redirect("/reset");
+      }
+      user.resetToken = token;
+      user.resetTokenExpire = Date.now() + 3600000
+       user.save()
+       .then(result => {
+        res.redirect("/");
+  
+        transporter.sendMail({
+          from: 'productStore@store.com',
+          to: req.body.email,
+          subject: "Password reset",
+          text: `
+          <p>You requested for password reset</p>
+          <p>Click this <a  href="http://localhost:30001/reset/${token}>link</a> to set new password</p> `
+        }, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        })
+  
+      });
+
+    })
+    
+  })
+}
