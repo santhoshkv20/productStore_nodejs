@@ -173,3 +173,30 @@ exports.postResetPassword = (req, res) => {
     
   })
 }
+
+exports.getNewPassword = (req,res)=>{
+  const token = req.params.token;
+  User.findOne({resetToken:token,resetTokenExpire:{$gt:Date.now()}})
+  .then(user=>{
+    if(!user){
+      req.flash("error","Rest password link is expired")
+      return res.redirect("/reset")
+    }
+    let message = req.flash('error');
+    if (message.length > 0) {
+      message = message[0];
+    } else {
+      message = null;
+    }
+    res.render('auth/new-password', {
+      path: '/new-password',
+      pageTitle: 'new-password',
+      errorMessage: message,
+      userId:user._id.toString()
+    });
+  })
+  .catch(err=>{
+
+  })
+  
+}
