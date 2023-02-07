@@ -192,11 +192,41 @@ exports.getNewPassword = (req,res)=>{
       path: '/new-password',
       pageTitle: 'new-password',
       errorMessage: message,
-      userId:user._id.toString()
+      userId:user._id.toString(),
+      resetToken:token
     });
   })
   .catch(err=>{
 
   })
   
+}
+
+exports.postNewPassword = (req, res) => {
+  const { userId, password, confirmedPassword, resetToken } = req.body
+  let resetUser;
+  User.findOne({
+    _id: userId,
+    resetToken: resetToken,
+    resetTokenExpire: { $gt: Date.now() }
+  }).then(user => {
+    if(!user){
+      req.flash("error","something went wrong")
+      return res.redirect("/login")
+    }else{
+      resetUser = user;
+      bcrypt.hash(password, 12)
+        .then(hashPassword => {
+          resetUser.password = hashPassword
+          resetUser.resetToken = undefined;
+          resetUser.resetTokenExpire = undefined
+          return resetUser.save();
+        }).then(user => {
+          res.redirect("/login")
+      })
+    }
+  })
+    .catch(err => {
+
+  })
 }
