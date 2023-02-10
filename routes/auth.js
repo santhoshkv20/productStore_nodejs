@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.get('/login', authController.getLogin);
 router.post('/login',
-check("email","Email is not valid").isEmail(), 
+check("email","Email is not valid").isEmail(),
+check("password").isAlphanumeric().withMessage("Enter valid password character"),
 authController.postLogin);
 router.post('/logout', authController.postLogout);
 
@@ -23,7 +24,7 @@ router.post('/signup',
                     }
                 })
         }),
-        
+
     check("password",
         "please enterpassword with length atleast 8 and only alpha numeric")
         .isLength({ min: 8 })
