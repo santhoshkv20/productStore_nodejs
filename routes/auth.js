@@ -9,8 +9,8 @@ const router = express.Router();
 
 router.get('/login', authController.getLogin);
 router.post('/login',
-check("email","Email is not valid").isEmail(),
-check("password").isAlphanumeric().withMessage("Enter valid password character"),
+check("email","Email is not valid").isEmail().normalizeEmail(),
+check("password").isAlphanumeric().withMessage("Enter valid password character").trim(),
 authController.postLogin);
 router.post('/logout', authController.postLogout);
 
@@ -23,19 +23,20 @@ router.post('/signup',
                         return Promise.reject("E-Mail exists already, please pick a different one.")
                     }
                 })
-        }),
+        }).normalizeEmail(),
 
     check("password",
         "please enterpassword with length atleast 8 and only alpha numeric")
         .isLength({ min: 8 })
-        .isAlphanumeric(),
+        .isAlphanumeric()
+        .trim(),
 
     body("confirmPassword").custom((value, { req }) => {
         if (value != req.body.password) {
             throw new Error("Password does not match")
         }
         return true
-    }),
+    }).trim(),
 authController.postSignup);
 router.get('/signup', authController.getSignup);
 router.get('/reset', authController.getreset);
