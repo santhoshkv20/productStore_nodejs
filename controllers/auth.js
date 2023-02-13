@@ -22,7 +22,9 @@ exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    errorMessage:message
+    errorMessage:message,
+    oldData:{email:"",password:""},
+    validationError:[]
 
   });
 };
@@ -96,8 +98,10 @@ exports.postLogin = (req, res) => {
   {
     return res.status(422).render('auth/login', {
       path: '/login',
-      pageTitle: 'Signup',
-      errorMessage: errors.array()[0].msg
+      pageTitle: 'Login',
+      errorMessage: errors.array()[0].msg,
+      oldData:{email,password},
+      validationError:errors.array()
     });
   }
   User.findOne({email:email})
@@ -116,10 +120,17 @@ exports.postLogin = (req, res) => {
           })
         }
         req.flash('error', 'Invalid email or password.');
-         return res.redirect("/login")
+        return res.status(422).render('auth/login', {
+          path: '/login',
+          pageTitle: 'Login',
+          errorMessage: "Invalid email or password.",
+          oldData:{email:email,password},
+          validationError:errors.array()
+        });
       }) 
       .catch(err=>{
-        res.redirect("/login")
+        console.log(err)
+       res.redirect("/login")
       })    
   })
 }
