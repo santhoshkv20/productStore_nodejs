@@ -26,7 +26,14 @@ router.post('/add-product', [
 
 router.get('/edit-product/:productId',is_auth, adminController.getEditProduct);
 
-router.post('/edit-product', is_auth,adminController.postEditProduct);
+router.post('/edit-product',
+[
+    body("title").isString().isLength({ min: 4 }).trim().withMessage("Check title"),
+    body("imageUrl").isURL().trim().withMessage("Check URL"),
+    body("price").isFloat().withMessage("Price should have decimal"),
+    body("description").isAlphanumeric().isLength({ min: 10 }).trim().withMessage("Description must be long")
+]
+,is_auth,adminController.postEditProduct);
 
 router.post('/delete-product',is_auth, adminController.postDeleteProduct);
 
