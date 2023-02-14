@@ -86,9 +86,11 @@ exports.postSignup = (req, res, next) => {
           });
         })
     
-    .catch(err => {
-      console.log(err);
-    });
+        .catch(err => {
+          const error =  new Error(err)
+          error.httpStatusCode = 500
+          return next(error)
+        });
 };
 
 exports.postLogin = (req, res) => {
@@ -196,7 +198,13 @@ exports.postResetPassword = (req, res) => {
   
       });
 
+
     })
+    .catch(err => {
+      const error =  new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    });
     
   })
 }
@@ -223,9 +231,11 @@ exports.getNewPassword = (req,res)=>{
       resetToken:token
     });
   })
-  .catch(err=>{
-
-  })
+  .catch(err => {
+    const error =  new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
+  });
   
 }
 
@@ -253,7 +263,9 @@ exports.postNewPassword = (req, res) => {
       })
     }
   })
-    .catch(err => {
-
-  })
+  .catch(err => {
+    const error =  new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
+  });
 }

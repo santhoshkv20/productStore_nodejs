@@ -3,3 +3,9 @@ exports.get404 = (req, res, next) => {
   isLoggedIn :req.session.isLoggedIn
 });
 };
+
+exports.get500 = (req, res, next) => {
+  res.status(500).render('500', { pageTitle: 'Something wentwrong', path: '/500',
+  isLoggedIn :req.session.isLoggedIn
+});
+};
